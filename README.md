@@ -2,6 +2,12 @@
 
 Modern black-themed static homepage, ready for GitHub Pages.
 
+## Highlights
+
+- Modern black UI with responsive glassmorphism sections.
+- Graceful runtime handling: no-JS support, reduced-motion support, and compatibility fallback if runtime errors occur.
+- Zero build step; deployable directly on GitHub Pages.
+
 ## Local preview
 
 ```bash

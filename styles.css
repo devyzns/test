@@ -263,3 +263,31 @@ h1 {
     align-items: flex-start;
   }
 }
+
+.runtime-banner {
+  position: fixed;
+  left: 50%;
+  bottom: 1rem;
+  transform: translateX(-50%);
+  z-index: 999;
+  width: min(92vw, 780px);
+  border: 1px solid #47475d;
+  border-radius: 0.8rem;
+  background: linear-gradient(145deg, #151725f0, #0f111df0);
+  color: #e8e9ff;
+  padding: 0.7rem 0.9rem;
+  text-align: center;
+  box-shadow: 0 12px 30px #00000080;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .btn {
+    transition: none;
+  }
+}
