@@ -1,11 +1,12 @@
-# NoirPulse Landing Page
+# Devware Landing Page
 
-Modern black-themed static homepage, ready for GitHub Pages.
+Modern black-themed static homepage, ready for GitHub Pages, now with a floating music player.
 
 ## Highlights
 
 - Modern black UI with responsive glassmorphism sections.
 - Graceful runtime handling: no-JS support, reduced-motion support, and compatibility fallback if runtime errors occur.
+- Floating pop-up music player (hide/show) with custom playlist links you control (e.g., Treaty Oak Revival tracks you choose).
 - Zero build step; deployable directly on GitHub Pages.
 
 ## Local preview

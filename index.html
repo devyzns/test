@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>NoirPulse — Modern Night Experience</title>
+    <title>Devware — Modern Night Experience</title>
     <meta
       name="description"
-      content="NoirPulse is a modern, dark, high-detail landing page template built for GitHub Pages."
+      content="Devware is a modern, dark, high-detail landing page template built for GitHub Pages with a built-in floating music player."
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -19,7 +19,7 @@
   <body>
     <div class="noise" aria-hidden="true"></div>
     <header class="site-header">
-      <div class="logo">NoirPulse</div>
+      <div class="logo">Devware</div>
       <nav>
         <a href="#features">Features</a>
         <a href="#showcase">Showcase</a>
@@ -109,6 +109,35 @@
       </div>
       <a class="btn primary" href="https://pages.github.com/">Deploy Now</a>
     </footer>
+
+
+
+    <aside class="music-player" id="musicPlayer" aria-label="Music player">
+      <button class="music-toggle" id="musicToggle" aria-expanded="true" aria-controls="musicPanel">Hide Player</button>
+      <div class="music-panel" id="musicPanel">
+        <p class="music-kicker">Now Playing on Devware</p>
+        <h3 id="trackTitle">Treaty Oak Revival — Pick a song</h3>
+        <audio id="audioElement" preload="metadata" controls></audio>
+
+        <div class="music-controls">
+          <button type="button" id="prevTrack">⏮</button>
+          <button type="button" id="playPause">▶</button>
+          <button type="button" id="nextTrack">⏭</button>
+        </div>
+
+        <label class="sr-only" for="playlistSelect">Choose a track</label>
+        <select id="playlistSelect" class="music-select"></select>
+
+        <form id="customTrackForm" class="music-form">
+          <label class="sr-only" for="customTrackName">Track name</label>
+          <input id="customTrackName" name="name" type="text" placeholder="Track name (e.g. Treaty Oak Revival - Boomtown)" required />
+          <label class="sr-only" for="customTrackUrl">Direct audio URL</label>
+          <input id="customTrackUrl" name="url" type="url" placeholder="https://example.com/song.mp3" required />
+          <button type="submit">Add Song</button>
+        </form>
+        <p class="music-note">Tip: add your own direct .mp3/.ogg links for Treaty Oak Revival songs you choose.</p>
+      </div>
+    </aside>
 
     <noscript>
       <div class="runtime-banner" role="status">
