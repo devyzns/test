@@ -145,28 +145,30 @@
       const userRes = await fetch('https://users.roblox.com/v1/usernames/users', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ usernames: [username], excludeBannedUsers: false })
+        body: JSON.stringify({ usernames: [username], excludeBannedUsers: true })
       });
       if (!userRes.ok) {
         throw new Error('lookup failed');
       }
+
       const userData = await userRes.json();
       const first = userData?.data?.[0];
-      if (!first?.id) {
+      const userId = first?.id;
+      if (!userId) {
         throw new Error('not found');
       }
-      const [detailRes, avatarRes] = await Promise.all([
-        fetch(`https://users.roblox.com/v1/users/${first.id}`),
-        fetch(`https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${first.id}&size=150x150&format=Png&isCircular=false`)
-      ]);
-      if (!detailRes.ok || !avatarRes.ok) {
-        throw new Error('details failed');
+
+      const avatarRes = await fetch(
+        `https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${userId}&size=150x150&format=Png&isCircular=false`
+      );
+      if (!avatarRes.ok) {
+        throw new Error('avatar fetch failed');
       }
-      const detail = await detailRes.json();
+
       const avatarPayload = await avatarRes.json();
       return {
-        username: detail.name || username,
-        displayName: detail.displayName || detail.name || username,
+        username: first?.requestedUsername || username,
+        displayName: first?.displayName || first?.requestedUsername || username,
         avatar: avatarPayload?.data?.[0]?.imageUrl || defaultAvatar
       };
     };
