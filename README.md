@@ -7,7 +7,7 @@ Modern black-themed static homepage, ready for GitHub Pages, now with a floating
 - Modern black UI with responsive glassmorphism sections.
 - Graceful runtime handling: no-JS support, reduced-motion support, and compatibility fallback if runtime errors occur.
 - Floating pop-up music player (hide/show) with custom playlist links you control (e.g., Treaty Oak Revival tracks you choose).
-- Admin-mode donation board: set a device PIN, unlock admin, then manually add Roblox username + donation amount with auto-fetch display name and avatar headshot when available.
+- Admin-mode donation board: small Admin button in the top bar opens PIN controls; after unlock, add Roblox username + amount with display/headshot lookup when available.
 - Zero build step; deployable directly on GitHub Pages.
 
 ## Local preview

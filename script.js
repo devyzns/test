@@ -1,5 +1,5 @@
 (() => {
-  const selectors = '.card, .panel, .hero-stats article, .site-footer';
+  const selectors = '.panel, .site-footer';
   const revealTargets = Array.from(document.querySelectorAll(selectors));
   const showAll = () => revealTargets.forEach((item) => item.classList.add('visible'));
 
@@ -21,7 +21,6 @@
       },
       { threshold: 0.12, rootMargin: '0px 0px -5% 0px' }
     );
-
     revealTargets.forEach((item) => observer.observe(item));
   }
 
@@ -29,7 +28,6 @@
     if (document.querySelector('.runtime-banner')) {
       return;
     }
-
     const banner = document.createElement('div');
     banner.className = 'runtime-banner';
     banner.setAttribute('role', 'status');
@@ -39,6 +37,8 @@
   };
 
   const initDonationsBoard = () => {
+    const adminLauncher = document.querySelector('#adminLauncher');
+    const adminPopover = document.querySelector('#adminPopover');
     const adminPinInput = document.querySelector('#adminPinInput');
     const adminUnlockBtn = document.querySelector('#adminUnlockBtn');
     const adminSetPinBtn = document.querySelector('#adminSetPinBtn');
@@ -51,19 +51,7 @@
     const noteInput = document.querySelector('#donationNote');
     const lookupStatus = document.querySelector('#lookupStatus');
 
-    if (
-      !adminPinInput ||
-      !adminUnlockBtn ||
-      !adminSetPinBtn ||
-      !adminLockBtn ||
-      !adminStatus ||
-      !donationForm ||
-      !donationList ||
-      !usernameInput ||
-      !amountInput ||
-      !noteInput ||
-      !lookupStatus
-    ) {
+    if (!adminLauncher || !adminPopover || !adminPinInput || !adminUnlockBtn || !adminSetPinBtn || !adminLockBtn || !adminStatus || !donationForm || !donationList || !usernameInput || !amountInput || !noteInput || !lookupStatus) {
       return;
     }
 
@@ -71,22 +59,17 @@
     const storedDonations = localStorage.getItem('devwareDonations');
     const donations = storedDonations ? JSON.parse(storedDonations) : [];
 
-    const saveDonations = () => {
-      localStorage.setItem('devwareDonations', JSON.stringify(donations));
-    };
+    const saveDonations = () => localStorage.setItem('devwareDonations', JSON.stringify(donations));
 
     const renderDonations = () => {
       donationList.innerHTML = '';
-
       if (!donations.length) {
-        donationList.innerHTML = '<article class="donation-item panel"><p>No donations yet. Turn on admin and add your first entry.</p></article>';
+        donationList.innerHTML = '<article class="donation-item panel"><p>No donations yet.</p></article>';
         return;
       }
-
       donations.forEach((entry, index) => {
         const card = document.createElement('article');
         card.className = 'donation-item panel';
-
         card.innerHTML = `
           <div class="donation-top">
             <img src="${entry.avatar || defaultAvatar}" alt="${entry.displayName || entry.username} avatar" loading="lazy" />
@@ -100,7 +83,6 @@
           <p class="music-note">${entry.dateLabel}</p>
           <button type="button" class="delete-donation" data-index="${index}" ${!document.body.classList.contains('admin-enabled') ? 'hidden' : ''}>Delete</button>
         `;
-
         donationList.appendChild(card);
       });
     };
@@ -109,11 +91,14 @@
       document.body.classList.toggle('admin-enabled', enabled);
       donationForm.hidden = !enabled;
       adminLockBtn.hidden = !enabled;
-      adminStatus.textContent = enabled ? 'Admin mode enabled on this device.' : 'Viewer mode. Enter PIN and unlock.';
+      adminStatus.textContent = enabled ? 'Admin mode enabled.' : 'Viewer mode. Use Admin button in top bar.';
       renderDonations();
     };
 
-    const getAdminPin = () => localStorage.getItem('devwareAdminPin');
+    adminLauncher.addEventListener('click', () => {
+      adminPopover.hidden = !adminPopover.hidden;
+      adminLauncher.setAttribute('aria-expanded', String(!adminPopover.hidden));
+    });
 
     adminSetPinBtn.addEventListener('click', () => {
       const pin = adminPinInput.value.trim();
@@ -127,22 +112,16 @@
     });
 
     adminUnlockBtn.addEventListener('click', () => {
-      const existingPin = getAdminPin();
+      const existingPin = localStorage.getItem('devwareAdminPin');
       if (!existingPin) {
-        createFallbackBanner('No admin PIN set yet. Use Set/Change PIN first.');
+        createFallbackBanner('No PIN set. Click Set PIN first.');
         return;
       }
-
       const entered = adminPinInput.value.trim();
-      if (!entered) {
-        createFallbackBanner('Enter your admin PIN first.');
-        return;
-      }
-
       if (entered === existingPin) {
         applyAdminMode(true);
       } else {
-        createFallbackBanner('Wrong admin PIN.');
+        createFallbackBanner('Wrong PIN.');
       }
       adminPinInput.value = '';
     });
@@ -157,8 +136,7 @@
       if (!button || !document.body.classList.contains('admin-enabled')) {
         return;
       }
-      const index = Number(button.dataset.index);
-      donations.splice(index, 1);
+      donations.splice(Number(button.dataset.index), 1);
       saveDonations();
       renderDonations();
     });
@@ -169,34 +147,27 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ usernames: [username], excludeBannedUsers: false })
       });
-
       if (!userRes.ok) {
-        throw new Error('Could not reach Roblox user lookup API.');
+        throw new Error('lookup failed');
       }
-
       const userData = await userRes.json();
       const first = userData?.data?.[0];
       if (!first?.id) {
-        throw new Error('Username not found on Roblox.');
+        throw new Error('not found');
       }
-
       const [detailRes, avatarRes] = await Promise.all([
         fetch(`https://users.roblox.com/v1/users/${first.id}`),
         fetch(`https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${first.id}&size=150x150&format=Png&isCircular=false`)
       ]);
-
       if (!detailRes.ok || !avatarRes.ok) {
-        throw new Error('Profile lookup partially failed.');
+        throw new Error('details failed');
       }
-
       const detail = await detailRes.json();
       const avatarPayload = await avatarRes.json();
-      const avatar = avatarPayload?.data?.[0]?.imageUrl || defaultAvatar;
-
       return {
         username: detail.name || username,
         displayName: detail.displayName || detail.name || username,
-        avatar
+        avatar: avatarPayload?.data?.[0]?.imageUrl || defaultAvatar
       };
     };
 
@@ -206,61 +177,50 @@
       const username = usernameInput.value.trim();
       previewProfile = null;
       if (!username) {
-        lookupStatus.textContent = 'Enter a Roblox username to auto-fetch display name + headshot.';
+        lookupStatus.textContent = 'Type username to fetch display name + headshot.';
         return;
       }
-
       lookupStatus.textContent = 'Looking up Roblox profile…';
       try {
         previewProfile = await fetchRobloxProfile(username);
         lookupStatus.textContent = `Found ${previewProfile.displayName} (@${previewProfile.username}).`;
-      } catch (error) {
-        lookupStatus.textContent = 'Could not auto-fetch profile. You can still save manual username + amount.';
+      } catch {
+        lookupStatus.textContent = 'Profile lookup unavailable right now; manual entry still works.';
       }
     });
 
     donationForm.addEventListener('submit', async (event) => {
       event.preventDefault();
-
       if (!document.body.classList.contains('admin-enabled')) {
-        createFallbackBanner('Unlock admin mode to add donations.');
+        createFallbackBanner('Unlock admin mode first.');
         return;
       }
-
       const rawUsername = usernameInput.value.trim();
       const rawAmount = amountInput.value.trim();
-      const rawNote = noteInput.value.trim();
       if (!rawUsername || !rawAmount) {
         return;
       }
-
       let profile = previewProfile;
       if (!profile || profile.username.toLowerCase() !== rawUsername.toLowerCase()) {
         try {
           profile = await fetchRobloxProfile(rawUsername);
         } catch {
-          profile = {
-            username: rawUsername,
-            displayName: rawUsername,
-            avatar: defaultAvatar
-          };
+          profile = { username: rawUsername, displayName: rawUsername, avatar: defaultAvatar };
         }
       }
-
       donations.unshift({
         username: profile.username,
         displayName: profile.displayName,
         avatar: profile.avatar,
         amount: Number(rawAmount),
-        note: rawNote,
+        note: noteInput.value.trim(),
         dateLabel: new Date().toLocaleString()
       });
-
       saveDonations();
       renderDonations();
       donationForm.reset();
       previewProfile = null;
-      lookupStatus.textContent = 'Saved! Add another donation.';
+      lookupStatus.textContent = 'Saved.';
     });
 
     applyAdminMode(false);
@@ -277,30 +237,20 @@
     const form = document.querySelector('#customTrackForm');
     const toggle = document.querySelector('#musicToggle');
     const panel = document.querySelector('#musicPanel');
-
     if (!audio || !title || !select || !playPause || !prev || !next || !form || !toggle || !panel) {
       return;
     }
 
     const stored = localStorage.getItem('devwarePlaylist');
-    const basePlaylist = [
-      {
-        title: 'Treaty Oak Revival - Add your licensed link',
-        url: ''
-      },
-      {
-        title: 'Treaty Oak Revival - Add another track URL',
-        url: ''
-      }
-    ];
-
-    const playlist = stored ? JSON.parse(stored) : basePlaylist;
+    const playlist = stored
+      ? JSON.parse(stored)
+      : [
+          { title: 'Treaty Oak Revival - Add your licensed link', url: '' },
+          { title: 'Treaty Oak Revival - Add another track URL', url: '' }
+        ];
     let currentIndex = 0;
 
-    const savePlaylist = () => {
-      localStorage.setItem('devwarePlaylist', JSON.stringify(playlist));
-    };
-
+    const savePlaylist = () => localStorage.setItem('devwarePlaylist', JSON.stringify(playlist));
     const renderPlaylist = () => {
       select.innerHTML = '';
       playlist.forEach((track, index) => {
@@ -318,11 +268,8 @@
       title.textContent = track.title;
       audio.src = track.url || '';
       select.value = String(currentIndex);
-
       if (autoPlay && track.url) {
-        audio.play().catch(() => {
-          createFallbackBanner('Tap play to start your selected track.');
-        });
+        audio.play().catch(() => createFallbackBanner('Tap play to start your selected track.'));
       }
     };
 
@@ -331,45 +278,30 @@
         createFallbackBanner('Add a direct audio URL to play your song.');
         return;
       }
-
       if (audio.paused) {
         audio.play().catch(() => createFallbackBanner('Browser blocked autoplay. Press play again.'));
       } else {
         audio.pause();
       }
     });
-
     prev.addEventListener('click', () => loadTrack(currentIndex - 1, true));
     next.addEventListener('click', () => loadTrack(currentIndex + 1, true));
-
-    select.addEventListener('change', (event) => {
-      loadTrack(Number(event.target.value), true);
-    });
-
+    select.addEventListener('change', (event) => loadTrack(Number(event.target.value), true));
     audio.addEventListener('play', () => {
       playPause.textContent = '⏸';
     });
-
     audio.addEventListener('pause', () => {
       playPause.textContent = '▶';
     });
-
-    audio.addEventListener('ended', () => {
-      loadTrack(currentIndex + 1, true);
-    });
+    audio.addEventListener('ended', () => loadTrack(currentIndex + 1, true));
 
     form.addEventListener('submit', (event) => {
       event.preventDefault();
       const formData = new FormData(form);
-      const track = {
-        title: String(formData.get('name') || '').trim(),
-        url: String(formData.get('url') || '').trim()
-      };
-
+      const track = { title: String(formData.get('name') || '').trim(), url: String(formData.get('url') || '').trim() };
       if (!track.title || !track.url) {
         return;
       }
-
       playlist.push(track);
       savePlaylist();
       currentIndex = playlist.length - 1;
