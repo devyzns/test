@@ -1,0 +1,492 @@
+:root {
+  --bg: #050507;
+  --bg-soft: #101014;
+  --text: #f6f6fb;
+  --muted: #a6a7b2;
+  --line: #242430;
+  --glow: #7f5bff;
+  --glow-2: #00d4ff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  background: radial-gradient(circle at 15% 10%, #171522 0%, var(--bg) 45%),
+    radial-gradient(circle at 85% 0%, #0d1a26 0%, transparent 35%), var(--bg);
+  color: var(--text);
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+}
+
+body {
+  line-height: 1.55;
+  overflow-x: hidden;
+}
+
+.noise {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  opacity: 0.08;
+  background-image: radial-gradient(#fff 0.45px, transparent 0.45px);
+  background-size: 4px 4px;
+}
+
+.site-header,
+.hero,
+.features,
+.showcase,
+.site-footer {
+  width: min(1120px, calc(100% - 2.5rem));
+  margin-inline: auto;
+}
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  margin-top: 1rem;
+  padding: 0.9rem 1.25rem;
+  border: 1px solid #2a2a37;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  backdrop-filter: blur(16px);
+  background: linear-gradient(145deg, #0f1018bb, #090a12bb);
+}
+
+.logo {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+nav {
+  display: flex;
+  gap: 1rem;
+}
+
+nav a {
+  color: #d9d9e8;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+nav a:hover {
+  color: #fff;
+}
+
+.hero {
+  padding: 7rem 0 3rem;
+}
+
+.pill {
+  width: fit-content;
+  margin: 0;
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid #363648;
+  color: #cdcee8;
+  background: #11111a;
+}
+
+h1 {
+  margin: 1.1rem 0 0.9rem;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: clamp(2.3rem, 7vw, 4.9rem);
+  line-height: 1.05;
+  max-width: 13ch;
+}
+
+.subtitle {
+  max-width: 63ch;
+  color: var(--muted);
+  font-size: clamp(1rem, 1.8vw, 1.2rem);
+}
+
+.cta-row {
+  margin-top: 1.8rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.7rem 1.1rem;
+  border-radius: 0.75rem;
+  border: 1px solid transparent;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+.btn.primary {
+  background: linear-gradient(120deg, var(--glow), #a977ff 40%, var(--glow-2));
+  box-shadow: 0 12px 40px #7f5bff66;
+}
+
+.btn.ghost {
+  border-color: #323245;
+  background: #0f1118;
+}
+
+.hero-stats {
+  margin-top: 2.2rem;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.9rem;
+}
+
+.hero-stats article,
+.card,
+.panel {
+  border: 1px solid var(--line);
+  border-radius: 1rem;
+  background: linear-gradient(145deg, #11121aab, #090b12ab);
+  backdrop-filter: blur(10px);
+}
+
+.hero-stats article {
+  padding: 1rem;
+}
+
+.hero-stats h3 {
+  margin: 0;
+  font-size: 1.65rem;
+}
+
+.hero-stats p {
+  margin: 0.35rem 0 0;
+  color: var(--muted);
+}
+
+.features {
+  margin-top: 1.6rem;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.9rem;
+}
+
+.card {
+  padding: 1.15rem;
+}
+
+.card h2,
+.showcase h2,
+.site-footer h2 {
+  margin: 0 0 0.55rem;
+  font-family: "Space Grotesk", sans-serif;
+}
+
+.card p,
+.panel p,
+.site-footer p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.showcase {
+  margin-top: 1.1rem;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0.9rem;
+}
+
+.panel {
+  padding: 1.15rem;
+  grid-column: span 3;
+}
+
+.panel.wide {
+  grid-column: span 6;
+}
+
+.site-footer {
+  margin: 2.4rem auto;
+  padding: 1.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border: 1px solid var(--line);
+  border-radius: 1.2rem;
+  background: linear-gradient(140deg, #11111aa3, #0c0d15cc);
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (max-width: 900px) {
+  nav {
+    display: none;
+  }
+
+  .hero-stats,
+  .features {
+    grid-template-columns: 1fr;
+  }
+
+  .showcase {
+    grid-template-columns: 1fr;
+  }
+
+  .panel,
+  .panel.wide {
+    grid-column: 1;
+  }
+
+  .site-footer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.runtime-banner {
+  position: fixed;
+  left: 50%;
+  bottom: 1rem;
+  transform: translateX(-50%);
+  z-index: 999;
+  width: min(92vw, 780px);
+  border: 1px solid #47475d;
+  border-radius: 0.8rem;
+  background: linear-gradient(145deg, #151725f0, #0f111df0);
+  color: #e8e9ff;
+  padding: 0.7rem 0.9rem;
+  text-align: center;
+  box-shadow: 0 12px 30px #00000080;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .btn {
+    transition: none;
+  }
+}
+
+.music-player {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 60;
+  width: min(92vw, 390px);
+}
+
+.music-toggle {
+  width: 100%;
+  margin-bottom: 0.55rem;
+  border: 1px solid #383850;
+  border-radius: 0.75rem;
+  background: #121523;
+  color: #ececff;
+  font-weight: 600;
+  padding: 0.6rem 0.8rem;
+  cursor: pointer;
+}
+
+.music-panel {
+  border: 1px solid #323247;
+  border-radius: 1rem;
+  padding: 0.9rem;
+  background: linear-gradient(145deg, #0f111aec, #090b14ec);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 16px 40px #0000008c;
+}
+
+.music-kicker {
+  margin: 0;
+  color: #c6c8de;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.music-panel h3 {
+  margin: 0.4rem 0 0.8rem;
+  font-size: 1rem;
+}
+
+.music-panel audio {
+  width: 100%;
+}
+
+.music-controls {
+  margin-top: 0.7rem;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.45rem;
+}
+
+.music-controls button,
+.music-form button {
+  border: 1px solid #3a3a4f;
+  border-radius: 0.6rem;
+  background: #16192a;
+  color: #f3f3ff;
+  font-weight: 600;
+  padding: 0.55rem;
+  cursor: pointer;
+}
+
+.music-select,
+.music-form input {
+  width: 100%;
+  margin-top: 0.55rem;
+  border: 1px solid #31314a;
+  border-radius: 0.6rem;
+  background: #111425;
+  color: #f8f8ff;
+  padding: 0.55rem;
+}
+
+.music-form {
+  display: grid;
+  gap: 0.35rem;
+  margin-top: 0.45rem;
+}
+
+.music-note {
+  margin: 0.65rem 0 0;
+  color: #aeb0c7;
+  font-size: 0.82rem;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+@media (max-width: 900px) {
+  .music-player {
+    right: 0.65rem;
+    left: 0.65rem;
+    width: auto;
+  }
+}
+
+.donation-section {
+  width: min(1120px, calc(100% - 2.5rem));
+  margin: 1.2rem auto 0;
+  display: grid;
+  gap: 0.9rem;
+}
+
+.donation-header {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.donation-admin-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.donation-form {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.donation-form input {
+  width: 100%;
+  border: 1px solid #31314a;
+  border-radius: 0.6rem;
+  background: #111425;
+  color: #f8f8ff;
+  padding: 0.6rem;
+}
+
+.donation-form button,
+.delete-donation {
+  border: 1px solid #3a3a4f;
+  border-radius: 0.6rem;
+  background: #16192a;
+  color: #f3f3ff;
+  font-weight: 600;
+  padding: 0.6rem;
+  cursor: pointer;
+}
+
+.donation-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.9rem;
+}
+
+.donation-item {
+  padding: 1rem;
+}
+
+.donation-top {
+  display: flex;
+  gap: 0.7rem;
+  align-items: center;
+}
+
+.donation-top img {
+  width: 52px;
+  height: 52px;
+  border-radius: 0.75rem;
+  border: 1px solid #3a3a4f;
+}
+
+.donation-top h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.donation-top p {
+  margin: 0.2rem 0 0;
+  color: var(--muted);
+}
+
+.donation-amount {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin: 0.8rem 0 0;
+}
+
+.donation-note {
+  margin: 0.35rem 0 0;
+  color: #c9cbe0;
+}
+
+@media (max-width: 900px) {
+  .donation-grid {
+    grid-template-columns: 1fr;
+  }
+}
