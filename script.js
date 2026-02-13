@@ -38,6 +38,213 @@
     document.body.appendChild(banner);
   };
 
+  const initDonationsBoard = () => {
+    const adminAccessBtn = document.querySelector('#adminAccessBtn');
+    const adminLockBtn = document.querySelector('#adminLockBtn');
+    const adminStatus = document.querySelector('#adminStatus');
+    const donationForm = document.querySelector('#donationForm');
+    const donationList = document.querySelector('#donationList');
+    const usernameInput = document.querySelector('#rbxUsername');
+    const amountInput = document.querySelector('#donationAmount');
+    const noteInput = document.querySelector('#donationNote');
+    const lookupStatus = document.querySelector('#lookupStatus');
+
+    if (
+      !adminAccessBtn ||
+      !adminLockBtn ||
+      !adminStatus ||
+      !donationForm ||
+      !donationList ||
+      !usernameInput ||
+      !amountInput ||
+      !noteInput ||
+      !lookupStatus
+    ) {
+      return;
+    }
+
+    const defaultAvatar = 'https://tr.rbxcdn.com/30DAY-AvatarHeadshot-42086E4A0BDB8A4EFA39C80B8A2F7F4A-Png/150/150/AvatarHeadshot/Webp/noFilter';
+    const storedDonations = localStorage.getItem('devwareDonations');
+    const donations = storedDonations ? JSON.parse(storedDonations) : [];
+
+    const saveDonations = () => {
+      localStorage.setItem('devwareDonations', JSON.stringify(donations));
+    };
+
+    const renderDonations = () => {
+      donationList.innerHTML = '';
+
+      if (!donations.length) {
+        donationList.innerHTML = '<article class="donation-item panel"><p>No donations yet. Turn on admin and add your first entry.</p></article>';
+        return;
+      }
+
+      donations.forEach((entry, index) => {
+        const card = document.createElement('article');
+        card.className = 'donation-item panel';
+
+        card.innerHTML = `
+          <div class="donation-top">
+            <img src="${entry.avatar || defaultAvatar}" alt="${entry.displayName || entry.username} avatar" loading="lazy" />
+            <div>
+              <h3>${entry.displayName || entry.username}</h3>
+              <p>@${entry.username}</p>
+            </div>
+          </div>
+          <p class="donation-amount">$${Number(entry.amount).toFixed(2)}</p>
+          ${entry.note ? `<p class="donation-note">${entry.note}</p>` : ''}
+          <p class="music-note">${entry.dateLabel}</p>
+          <button type="button" class="delete-donation" data-index="${index}" ${!document.body.classList.contains('admin-enabled') ? 'hidden' : ''}>Delete</button>
+        `;
+
+        donationList.appendChild(card);
+      });
+    };
+
+    const applyAdminMode = (enabled) => {
+      document.body.classList.toggle('admin-enabled', enabled);
+      donationForm.hidden = !enabled;
+      adminLockBtn.hidden = !enabled;
+      adminStatus.textContent = enabled ? 'Admin mode enabled on this device.' : 'Viewer mode.';
+      renderDonations();
+    };
+
+    const getAdminPin = () => localStorage.getItem('devwareAdminPin');
+
+    adminAccessBtn.addEventListener('click', () => {
+      const existingPin = getAdminPin();
+      if (!existingPin) {
+        const newPin = window.prompt('Set a PIN for admin on this device:');
+        if (!newPin) {
+          return;
+        }
+        localStorage.setItem('devwareAdminPin', newPin);
+        applyAdminMode(true);
+        return;
+      }
+
+      const entered = window.prompt('Enter admin PIN:');
+      if (entered === existingPin) {
+        applyAdminMode(true);
+      } else if (entered !== null) {
+        createFallbackBanner('Wrong admin PIN.');
+      }
+    });
+
+    adminLockBtn.addEventListener('click', () => {
+      applyAdminMode(false);
+    });
+
+    donationList.addEventListener('click', (event) => {
+      const button = event.target.closest('.delete-donation');
+      if (!button) {
+        return;
+      }
+      const index = Number(button.dataset.index);
+      donations.splice(index, 1);
+      saveDonations();
+      renderDonations();
+    });
+
+    const fetchRobloxProfile = async (username) => {
+      const userRes = await fetch('https://users.roblox.com/v1/usernames/users', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ usernames: [username], excludeBannedUsers: false })
+      });
+
+      if (!userRes.ok) {
+        throw new Error('Could not reach Roblox user lookup API.');
+      }
+
+      const userData = await userRes.json();
+      const first = userData?.data?.[0];
+      if (!first?.id) {
+        throw new Error('Username not found on Roblox.');
+      }
+
+      const [detailRes, avatarRes] = await Promise.all([
+        fetch(`https://users.roblox.com/v1/users/${first.id}`),
+        fetch(`https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${first.id}&size=150x150&format=Png&isCircular=false`)
+      ]);
+
+      if (!detailRes.ok || !avatarRes.ok) {
+        throw new Error('Profile lookup partially failed.');
+      }
+
+      const detail = await detailRes.json();
+      const avatarPayload = await avatarRes.json();
+      const avatar = avatarPayload?.data?.[0]?.imageUrl || defaultAvatar;
+
+      return {
+        username: detail.name || username,
+        displayName: detail.displayName || detail.name || username,
+        avatar
+      };
+    };
+
+    let previewProfile = null;
+
+    usernameInput.addEventListener('change', async () => {
+      const username = usernameInput.value.trim();
+      previewProfile = null;
+      if (!username) {
+        lookupStatus.textContent = 'Enter a Roblox username to auto-fetch display name + headshot.';
+        return;
+      }
+
+      lookupStatus.textContent = 'Looking up Roblox profile…';
+      try {
+        previewProfile = await fetchRobloxProfile(username);
+        lookupStatus.textContent = `Found ${previewProfile.displayName} (@${previewProfile.username}).`;
+      } catch (error) {
+        lookupStatus.textContent = 'Could not auto-fetch profile. You can still save manual username + amount.';
+      }
+    });
+
+    donationForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const rawUsername = usernameInput.value.trim();
+      const rawAmount = amountInput.value.trim();
+      const rawNote = noteInput.value.trim();
+      if (!rawUsername || !rawAmount) {
+        return;
+      }
+
+      let profile = previewProfile;
+      if (!profile || profile.username.toLowerCase() !== rawUsername.toLowerCase()) {
+        try {
+          profile = await fetchRobloxProfile(rawUsername);
+        } catch {
+          profile = {
+            username: rawUsername,
+            displayName: rawUsername,
+            avatar: defaultAvatar
+          };
+        }
+      }
+
+      donations.unshift({
+        username: profile.username,
+        displayName: profile.displayName,
+        avatar: profile.avatar,
+        amount: Number(rawAmount),
+        note: rawNote,
+        dateLabel: new Date().toLocaleString()
+      });
+
+      saveDonations();
+      renderDonations();
+      donationForm.reset();
+      previewProfile = null;
+      lookupStatus.textContent = 'Saved! Add another donation.';
+    });
+
+    applyAdminMode(false);
+    renderDonations();
+  };
+
   const initMusicPlayer = () => {
     const audio = document.querySelector('#audioElement');
     const title = document.querySelector('#trackTitle');
@@ -168,6 +375,7 @@
     loadTrack(0, false);
   };
 
+  initDonationsBoard();
   initMusicPlayer();
 
   window.addEventListener('error', () => {

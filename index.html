@@ -6,7 +6,7 @@
     <title>Devware — Modern Night Experience</title>
     <meta
       name="description"
-      content="Devware is a modern, dark, high-detail landing page template built for GitHub Pages with a built-in floating music player."
+      content="Devware is a modern, dark, high-detail landing page template built for GitHub Pages with a built-in floating music player and donation board."
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -23,6 +23,7 @@
       <nav>
         <a href="#features">Features</a>
         <a href="#showcase">Showcase</a>
+        <a href="#donations">Donations</a>
         <a href="#contact">Contact</a>
       </nav>
       <a class="btn ghost" href="#contact">Start Project</a>
@@ -97,6 +98,29 @@
           <p>Interactive elements glow to guide user attention.</p>
         </div>
       </section>
+
+      <section id="donations" class="donation-section">
+        <div class="donation-header panel wide">
+          <h2>Recent Donations</h2>
+          <p>Manual board you can edit on your own device in Admin Mode.</p>
+          <div class="donation-admin-actions">
+            <button id="adminAccessBtn" type="button" class="btn ghost">Enable Admin on This Device</button>
+            <button id="adminLockBtn" type="button" class="btn ghost" hidden>Lock Admin</button>
+          </div>
+          <p id="adminStatus" class="music-note">Viewer mode.</p>
+        </div>
+
+        <form id="donationForm" class="donation-form panel" hidden>
+          <h3>Add Donation Entry</h3>
+          <input id="rbxUsername" name="username" type="text" placeholder="Roblox username" required />
+          <input id="donationAmount" name="amount" type="number" step="0.01" min="0" placeholder="Amount donated" required />
+          <input id="donationNote" name="note" type="text" placeholder="Optional note" />
+          <button type="submit">Add Donation</button>
+          <p id="lookupStatus" class="music-note">Enter a Roblox username to auto-fetch display name + headshot.</p>
+        </form>
+
+        <div id="donationList" class="donation-grid"></div>
+      </section>
     </main>
 
     <footer id="contact" class="site-footer">
@@ -109,8 +133,6 @@
       </div>
       <a class="btn primary" href="https://pages.github.com/">Deploy Now</a>
     </footer>
-
-
 
     <aside class="music-player" id="musicPlayer" aria-label="Music player">
       <button class="music-toggle" id="musicToggle" aria-expanded="true" aria-controls="musicPanel">Hide Player</button>
