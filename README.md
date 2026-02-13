@@ -1,14 +1,12 @@
 # Devware Landing Page
 
-Modern black-themed static homepage, ready for GitHub Pages, now with a floating music player.
+Modern black-themed static homepage, ready for GitHub Pages, with an auto-random music player.
 
 ## Highlights
 
-- Modern black UI with responsive glassmorphism sections.
-- Graceful runtime handling: no-JS support, reduced-motion support, and compatibility fallback if runtime errors occur.
-- Floating pop-up music player (hide/show) with custom playlist links you control (e.g., Treaty Oak Revival tracks you choose).
-- Admin-mode donation board: small Admin button in the top bar opens PIN controls; after unlock, add Roblox username + amount with display/headshot lookup when available.
-- Roblox lookup uses `users.roblox.com/v1/usernames/users` and `thumbnails.roblox.com/v1/users/avatar-headshot` endpoints.
+- Dark modern UI with lightweight responsive layout.
+- Floating pop-up music player (hide/show).
+- Automatically fetches random rap and country preview tracks from iTunes Search API.
 - Zero build step; deployable directly on GitHub Pages.
 
 ## Local preview
