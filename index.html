@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Devware</title>
+    <meta name="description" content="Devware modern dark landing page with floating full-song music player." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="noise" aria-hidden="true"></div>
+
+    <header class="site-header">
+      <div class="logo">Devware</div>
+      <nav>
+        <a href="#home">Home</a>
+        <a href="contact.html" target="_blank" rel="noopener noreferrer">Contact</a>
+      </nav>
+    </header>
+
+    <main id="home" class="hero">
+      <p class="pill">Devware</p>
+      <h1>Modern dark homepage.</h1>
+      <p class="subtitle">
+        Clean, minimal, and focused. Your full-song popup player stays available while the page remains simple.
+      </p>
+    </main>
+
+    <aside class="music-player" id="musicPlayer" aria-label="Music player">
+      <button class="music-toggle" id="musicToggle" aria-expanded="true" aria-controls="musicPanel">Hide Player</button>
+      <div class="music-panel" id="musicPanel">
+        <p class="music-kicker">Now Playing</p>
+        <h3 id="trackTitle">Loading full song…</h3>
+        <audio id="audioElement" preload="metadata" controls></audio>
+
+        <div class="music-controls">
+          <button type="button" id="prevTrack">⏮</button>
+          <button type="button" id="playPause">▶</button>
+          <button type="button" id="nextTrack">⏭</button>
+        </div>
+
+        <select id="playlistSelect" class="music-select" aria-label="Playlist"></select>
+        <p id="musicStatus" class="music-note">Full-length tracks loaded.</p>
+      </div>
+    </aside>
+
+    <noscript>
+      <div class="runtime-banner" role="status">JavaScript is disabled. Music player requires JS.</div>
+    </noscript>
+
+    <script src="script.js"></script>
+  </body>
+</html>
