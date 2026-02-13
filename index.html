@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Devware — Donations + Music</title>
+    <meta
+      name="description"
+      content="Devware dark homepage with donation board, Roblox profile lookup, and floating music player."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="noise" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="logo">Devware</div>
+      <nav>
+        <a href="#donations">Recent Donations</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <div class="admin-topbar">
+        <button id="adminLauncher" type="button" class="btn ghost btn-small" aria-expanded="false" aria-controls="adminPopover">
+          Admin
+        </button>
+        <div id="adminPopover" class="admin-popover" hidden>
+          <input id="adminPinInput" type="password" placeholder="PIN" autocomplete="current-password" />
+          <button id="adminUnlockBtn" type="button" class="btn ghost btn-small">Unlock</button>
+          <button id="adminSetPinBtn" type="button" class="btn ghost btn-small">Set PIN</button>
+          <button id="adminLockBtn" type="button" class="btn ghost btn-small" hidden>Lock</button>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <p class="pill">Devware</p>
+        <h1>Donations + Music, clean and simple.</h1>
+        <p class="subtitle">
+          Manage your recent donations manually, fetch Roblox display names/headshots when available, and keep your floating player on-screen.
+        </p>
+      </section>
+
+      <section id="donations" class="donation-section">
+        <div class="donation-header panel wide">
+          <h2>Recent Donations</h2>
+          <p>Manual board you can edit from your device after admin unlock.</p>
+          <p id="adminStatus" class="music-note">Viewer mode. Use Admin button in top bar.</p>
+        </div>
+
+        <form id="donationForm" class="donation-form panel" hidden>
+          <h3>Add Donation Entry</h3>
+          <input id="rbxUsername" name="username" type="text" placeholder="Roblox username" required />
+          <input id="donationAmount" name="amount" type="number" step="0.01" min="0" placeholder="Amount donated" required />
+          <input id="donationNote" name="note" type="text" placeholder="Optional note" />
+          <button type="submit">Add Donation</button>
+          <p id="lookupStatus" class="music-note">Type username to fetch display name + headshot.</p>
+        </form>
+
+        <div id="donationList" class="donation-grid"></div>
+      </section>
+    </main>
+
+    <footer id="contact" class="site-footer">
+      <div>
+        <h2>Launch on GitHub Pages in minutes.</h2>
+        <p>Push, enable Pages, and you’re live.</p>
+      </div>
+      <a class="btn primary" href="https://pages.github.com/">Deploy Now</a>
+    </footer>
+
+    <aside class="music-player" id="musicPlayer" aria-label="Music player">
+      <button class="music-toggle" id="musicToggle" aria-expanded="true" aria-controls="musicPanel">Hide Player</button>
+      <div class="music-panel" id="musicPanel">
+        <p class="music-kicker">Now Playing on Devware</p>
+        <h3 id="trackTitle">Treaty Oak Revival — Pick a song</h3>
+        <audio id="audioElement" preload="metadata" controls></audio>
+
+        <div class="music-controls">
+          <button type="button" id="prevTrack">⏮</button>
+          <button type="button" id="playPause">▶</button>
+          <button type="button" id="nextTrack">⏭</button>
+        </div>
+
+        <label class="sr-only" for="playlistSelect">Choose a track</label>
+        <select id="playlistSelect" class="music-select"></select>
+
+        <form id="customTrackForm" class="music-form">
+          <label class="sr-only" for="customTrackName">Track name</label>
+          <input id="customTrackName" name="name" type="text" placeholder="Track name" required />
+          <label class="sr-only" for="customTrackUrl">Direct audio URL</label>
+          <input id="customTrackUrl" name="url" type="url" placeholder="https://example.com/song.mp3" required />
+          <button type="submit">Add Song</button>
+        </form>
+      </div>
+    </aside>
+
+    <noscript>
+      <div class="runtime-banner" role="status">JavaScript is disabled. Static content still works.</div>
+    </noscript>
+
+    <script src="script.js"></script>
+  </body>
+</html>
