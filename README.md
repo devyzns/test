@@ -1,12 +1,15 @@
 # Devware Landing Page
 
-Modern black-themed static homepage, ready for GitHub Pages, with an auto-random music player.
+Modern black-themed static homepage, ready for GitHub Pages, with a floating full-song music player.
 
 ## Highlights
 
-- Dark modern UI with lightweight responsive layout.
+- Clean homepage (no admin or donations UI).
 - Floating pop-up music player (hide/show).
-- Automatically fetches random rap and country preview tracks from iTunes Search API.
+- Uses full-length track URLs (not 30-second previews).
+- Contact link opens a new window/tab with:
+  - discord: `devyzns`
+  - roblox: `devyzns`
 - Zero build step; deployable directly on GitHub Pages.
 
 ## Local preview

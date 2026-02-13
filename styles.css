@@ -7,9 +7,7 @@
   --glow-2: #00d4ff;
 }
 
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 html,
 body {
@@ -19,11 +17,6 @@ body {
     radial-gradient(circle at 85% 0%, #0d1a26 0%, transparent 35%), var(--bg);
   color: var(--text);
   font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-}
-
-body {
-  line-height: 1.55;
-  overflow-x: hidden;
 }
 
 .noise {
@@ -36,9 +29,7 @@ body {
 }
 
 .site-header,
-.hero,
-.music-info,
-.site-footer {
+.hero {
   width: min(1120px, calc(100% - 2.5rem));
   margin-inline: auto;
 }
@@ -58,27 +49,11 @@ body {
   background: linear-gradient(145deg, #0f1018bb, #090a12bb);
 }
 
-.logo {
-  font-family: "Space Grotesk", sans-serif;
-  font-size: 1.1rem;
-  font-weight: 700;
-}
+.logo { font-family: "Space Grotesk", sans-serif; font-size: 1.1rem; font-weight: 700; }
+nav { display: flex; gap: 1rem; }
+nav a { color: #d9d9e8; text-decoration: none; font-weight: 500; }
 
-nav {
-  display: flex;
-  gap: 1rem;
-}
-
-nav a {
-  color: #d9d9e8;
-  text-decoration: none;
-  font-weight: 500;
-}
-
-.hero {
-  padding: 7rem 0 2rem;
-}
-
+.hero { padding: 7rem 0 3rem; }
 .pill {
   width: fit-content;
   margin: 0;
@@ -88,60 +63,8 @@ nav a {
   color: #cdcee8;
   background: #11111a;
 }
-
-h1 {
-  margin: 1rem 0 0.8rem;
-  font-family: "Space Grotesk", sans-serif;
-  font-size: clamp(2rem, 6vw, 4.4rem);
-  line-height: 1.05;
-  max-width: 14ch;
-}
-
-.subtitle {
-  max-width: 65ch;
-  color: var(--muted);
-}
-
-.panel,
-.site-footer {
-  border: 1px solid var(--line);
-  border-radius: 1rem;
-  background: linear-gradient(145deg, #11121aab, #090b12ab);
-  backdrop-filter: blur(10px);
-}
-
-.music-info {
-  padding: 1rem;
-}
-
-.music-info h2 {
-  margin: 0;
-}
-
-.site-footer {
-  margin: 1.5rem auto 2.8rem;
-  padding: 1.2rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-}
-
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.7rem 1.1rem;
-  border-radius: 0.75rem;
-  border: 1px solid transparent;
-  color: #fff;
-  text-decoration: none;
-  font-weight: 600;
-}
-
-.btn.primary {
-  background: linear-gradient(120deg, var(--glow), #a977ff 40%, var(--glow-2));
-}
+h1 { margin: 1rem 0 0.8rem; font-family: "Space Grotesk", sans-serif; font-size: clamp(2rem, 6vw, 4.4rem); }
+.subtitle { max-width: 65ch; color: var(--muted); }
 
 .music-player {
   position: fixed;
@@ -173,34 +96,19 @@ h1 {
 }
 
 .music-kicker,
-.music-note {
-  margin: 0;
-  color: #c6c8de;
-}
+.music-note { margin: 0; color: #c6c8de; }
+.music-panel h3 { margin: 0.4rem 0 0.8rem; font-size: 1rem; }
+.music-panel audio,
+.music-select { width: 100%; }
 
-.music-panel h3 {
-  margin: 0.4rem 0 0.8rem;
-  font-size: 1rem;
-}
-
-.music-panel audio {
-  width: 100%;
-}
-
-.music-controls,
-.music-genre-controls {
+.music-controls {
   margin-top: 0.65rem;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.45rem;
 }
 
-.music-genre-controls {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
-.music-controls button,
-.genre-btn {
+.music-controls button {
   border: 1px solid #3a3a4f;
   border-radius: 0.6rem;
   background: #16192a;
@@ -210,20 +118,13 @@ h1 {
   cursor: pointer;
 }
 
-.genre-btn.active {
-  border-color: #795cff;
-  box-shadow: inset 0 0 0 1px #795cff;
-}
-
-.reveal {
-  opacity: 0;
-  transform: translateY(10px);
-  transition: opacity 0.5s ease, transform 0.5s ease;
-}
-
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
+.music-select {
+  margin-top: 0.6rem;
+  border: 1px solid #31314a;
+  border-radius: 0.6rem;
+  background: #111425;
+  color: #f8f8ff;
+  padding: 0.55rem;
 }
 
 .runtime-banner {
@@ -239,26 +140,6 @@ h1 {
   padding: 0.7rem 0.9rem;
 }
 
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  border: 0;
-}
-
 @media (max-width: 900px) {
-  .site-footer {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .music-player {
-    right: 0.65rem;
-    left: 0.65rem;
-    width: auto;
-  }
+  .music-player { right: 0.65rem; left: 0.65rem; width: auto; }
 }
