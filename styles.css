@@ -421,6 +421,15 @@ h1 {
   gap: 0.55rem;
 }
 
+.donation-admin-actions input {
+  min-width: 170px;
+  border: 1px solid #31314a;
+  border-radius: 0.6rem;
+  background: #111425;
+  color: #f8f8ff;
+  padding: 0.6rem;
+}
+
 .donation-form input {
   width: 100%;
   border: 1px solid #31314a;
@@ -489,4 +498,35 @@ h1 {
   .donation-grid {
     grid-template-columns: 1fr;
   }
+}
+
+.btn-small {
+  padding: 0.45rem 0.75rem;
+  font-size: 0.86rem;
+}
+
+.admin-topbar {
+  position: relative;
+}
+
+.admin-popover {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 0.5rem);
+  display: grid;
+  gap: 0.45rem;
+  min-width: 180px;
+  padding: 0.65rem;
+  border: 1px solid #303046;
+  border-radius: 0.75rem;
+  background: #0e1018f2;
+  backdrop-filter: blur(10px);
+}
+
+.admin-popover input {
+  border: 1px solid #31314a;
+  border-radius: 0.5rem;
+  background: #111425;
+  color: #f8f8ff;
+  padding: 0.5rem;
 }
